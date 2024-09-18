@@ -1,6 +1,7 @@
-import { useContext } from 'react';
-import { useState } from 'react';
-import { createContext } from 'react';
+import { useContext, useState, createContext } from 'react';
+import AccordionItem from './AccordionItem';
+import AccordionContent from './AccordionContent';
+import AccordionTitle from './AccordionTitle';
 
 const AccordionContext = createContext();
 
@@ -9,16 +10,21 @@ export function useAccordionContext() {
 
   if (!ctx) {
     throw new Error(
-      'Accordion-related components must be wrapped by <Accordion>'
+      'Accordion-related components must be wrapped by <Accordion> component'
     );
     // this is used to notify other developers that this component
     // must be used as an extra wrapper around which ever component
     // that wants to use present context hook
   }
+  return ctx;
 }
 
 export default function Accordion({ children, className }) {
   const [openItemId, setOpenItemId] = useState();
+
+  function toggleItem(id) {
+    setOpenItemId((prevId) => (prevId === id ? null : id));
+  }
 
   function openItem(id) {
     setOpenItemId(id);
@@ -30,13 +36,16 @@ export default function Accordion({ children, className }) {
 
   const contextValue = {
     openItemId,
-    openItem,
-    closeItem,
+    toggleItem,
   };
 
   return (
     <AccordionContext.Provider value={contextValue}>
-      <ul className={className}>{children}</ul>;
+      <ul className={className}>{children}</ul>
     </AccordionContext.Provider>
   );
 }
+
+Accordion.Item = AccordionItem;
+Accordion.Title = AccordionTitle;
+Accordion.Content = AccordionContent;
