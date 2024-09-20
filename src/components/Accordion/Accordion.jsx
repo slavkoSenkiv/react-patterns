@@ -26,14 +26,6 @@ export default function Accordion({ children, className }) {
     setOpenItemId((prevId) => (prevId === id ? null : id));
   }
 
-  function openItem(id) {
-    setOpenItemId(id);
-  }
-
-  function closeItem() {
-    setOpenItemId(null);
-  }
-
   const contextValue = {
     openItemId,
     toggleItem,
